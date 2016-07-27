@@ -1,0 +1,12 @@
+Shortest Path Routing Protocol for NS3
+
+written by Junseok KIM, last updated Dec 23, 2011
+
+When you develop or evaluate MAC protocols in an ad-hoc network, you may need a simple routing protocol, helping you only focus on the MAC performance.
+Currently, NS3 provides only AODV routing protocol for wireless systems. The AODV implementation follows the RFC standard, so it requires to exchange many packets to establish routes.
+
+I implemented the shortest path routing protocol on NS3. This protocol does not generate any packet.
+All nodes share the routing table. By users' command, the shortest paths between all pairs are obtained using Floyd-Warshall algorithm, and stored in the table.
+
+I did not use it for mobile networks, but it can be used in a mobile scenario by updating the routing table often.
+You can learn how to use it by reading an example script.

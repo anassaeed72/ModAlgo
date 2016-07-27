@@ -1,0 +1,19 @@
+## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+
+def build(bld):
+    module = bld.create_ns3_module('mod', ['network'])
+    module.source = [
+        'mod-routing-helper.cc',
+        'mod-routing-table.cc',
+        'mod-routing.cc',
+        ]
+    headers = bld(features='ns3header')
+    headers.module = 'mod'
+    headers.source = [
+        'mod-routing-helper.h',
+        'mod-routing-table.h',
+        'mod-routing.h',
+        ]
+
+
+    #bld.ns3_python_bindings()
