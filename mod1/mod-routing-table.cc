@@ -64,11 +64,7 @@ ModRoutingTable::AddRoute (Ipv4Address srcAddr, Ipv4Address relayAddr, Ipv4Addre
   
   m_modtable.push_back (se);
 }
-std::vector<Ipv4Address> findListOfAttachedRelays(Ipv4Address currentNode){
-   // return the list of attached nodes to currentNode
-  std::vector<Ipv4Address> vectorOfRelays;
-  return vectorOfRelays;
-}
+
 void
 ModRoutingTable::AddNode (Ptr<Node> node, Ipv4Address addr)
 {

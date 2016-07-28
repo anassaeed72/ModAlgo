@@ -1,15 +1,4 @@
 
-#include <list>
-#include <utility>
-#include <stdint.h>
-#include "ns3/ipv4-address.h"
-#include "ns3/ipv4-header.h"
-#include "ns3/socket.h"
-#include "ns3/ptr.h"
-#include "ns3/ipv4.h"
-#include "ns3/ipv4-routing-protocol.h"
-#include <vector>
-using namespace ns3;
 class MyTag : public Tag
 {
 public:

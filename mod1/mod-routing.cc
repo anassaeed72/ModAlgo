@@ -25,48 +25,7 @@
 #include "ns3/double.h"
 #include "ns3/ipv4-static-routing.h"
 #include "mod-routing.h"
-#include "MyTag.h"
- #include <list>
-#include <map>
-#include <vector>
-#include <stdint.h>
-#include "ns3/ipv4-address.h"
-#include "ns3/ptr.h"
-#include "ns3/net-device.h"
-#include "ns3/ipv4.h"
-#include "ns3/traced-callback.h"
-#include "ns3/ipv4-header.h"
-#include "ns3/ipv4-routing-protocol.h"
-#include "ns3/nstime.h"
-#include "ns3/simulator.h"
- #include "ns3/packet.h"
-#include "ns3/log.h"
-#include "ns3/callback.h"
-#include "ns3/ipv4-address.h"
-#include "ns3/ipv4-route.h"
-#include "ns3/node.h"
-#include "ns3/socket.h"
-#include "ns3/net-device.h"
-#include "ns3/uinteger.h"
-#include "ns3/trace-source-accessor.h"
-#include "ns3/object-vector.h"
-#include "ns3/ipv4-header.h"
-#include "ns3/boolean.h"
-#include "ns3/ipv4-routing-table-entry.h"
-#include "ns3/traffic-control-layer.h"
-// #include "ns3/ip"
-// #include "arp-l3-protocol.h"
-// #include "ipv4-l3-protocol.h"
-// #include "icmpv4-l4-protocol.h"
-// #include "ipv4-interface.h"
-// #include "ipv4-raw-socket-impl.h"
-#include "ns3/tag.h"
-#include "ns3/packet.h"
-#include "ns3/tag.h"
-#include "ns3/packet.h"
-#include "ns3/uinteger.h"
-#include <iostream>
-#include <vector>
+
 NS_LOG_COMPONENT_DEFINE ("ModRouting");
 
 namespace ns3 {
@@ -117,16 +76,6 @@ ModRouting::RouteOutput (Ptr<Packet> p, const Ipv4Header &header, Ptr<NetDevice>
   
   sockerr = Socket::ERROR_NOTERROR;
   
-  MyTag tagForPacket;
-  int numberOfSwitches = 10;
-  std::vector<uint8_t> vectorForPacket(numberOfSwitches);
-  for (int i = 0; i < numberOfSwitches; ++i)
-  {
-    /* code */
-    vectorForPacket.push_back(0x00);
-  }
-  tagForPacket.SetSimpleValue(vectorForPacket);
-  // p->AddPacketTag(tagForPacket);
   return route;
 }
 
@@ -136,8 +85,7 @@ ModRouting::RouteInput (Ptr<const Packet> p, const Ipv4Header &header, Ptr<const
                              LocalDeliverCallback lcb, ErrorCallback ecb)
 {
   NS_LOG_FUNCTION (header.GetDestination ());
-  MyTag tagForPacket;
-  p->PeekPacketTag(tagForPacket);
+
   if (header.GetDestination () == m_address)
     {
       NS_LOG_DEBUG ("I'm the destination");
@@ -149,7 +97,7 @@ ModRouting::RouteInput (Ptr<const Packet> p, const Ipv4Header &header, Ptr<const
       NS_LOG_DEBUG ("It's broadcast");
       return true;
     }
-  else if (tagForPacket.GetSimpleValueByIndex(idev->GetNode()->GetId()) == 0x00)
+  else
     {
       Ipv4Address relay = m_rtable->LookupRoute (m_address, header.GetDestination ());
       NS_LOG_FUNCTION (this << m_address << "->" << relay << "->" << header.GetDestination ());
@@ -165,22 +113,6 @@ ModRouting::RouteInput (Ptr<const Packet> p, const Ipv4Header &header, Ptr<const
       route->SetOutputDevice (m_ipv4->GetNetDevice (m_ifaceId));
       ucb (route, p, header);
       return true;
-    }
-    else{
-
-      int tagForPacketValue = tagForPacket.GetSimpleValueByIndex(idev->GetNode()->GetId());
-      int maxDevices = idev->GetNode()->GetNDevices();
-      int indexOfOutputDevice = (tagForPacketValue%maxDevices) +1;
-      Ptr<NetDevice>outputDevice = idev->GetNode()->GetDevice(indexOfOutputDevice);
-      tagForPacket.SetSimpleValueByIndex(idev->GetNode()->GetId(),(uint8_t)indexOfOutputDevice);
-      while (outputDevice->IsLinkUp() == false){
-        tagForPacketValue = tagForPacket.GetSimpleValueByIndex(idev->GetNode()->GetId());
-        maxDevices = idev->GetNode()->GetNDevices();
-        indexOfOutputDevice = (tagForPacketValue%maxDevices) +1;
-        Ptr<NetDevice>outputDevice = idev->GetNode()->GetDevice(indexOfOutputDevice);
-        tagForPacket.SetSimpleValueByIndex(idev->GetNode()->GetId(),(uint8_t)indexOfOutputDevice);
-      }
-      lcb(p,header,m_ipv4->GetInterfaceForDevice (outputDevice));
     }
   return false;
 }

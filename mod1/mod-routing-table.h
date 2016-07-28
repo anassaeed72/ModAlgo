@@ -44,7 +44,7 @@ public:
   double GetDistance (Ipv4Address srcAddr, Ipv4Address dstAddr);
 
   void Print (Ptr<OutputStreamWrapper> stream) const;
-  std::vector<Ipv4Address> findListOfAttachedRelays(Ipv4Address currentNode);
+
 private:
   typedef struct
     {

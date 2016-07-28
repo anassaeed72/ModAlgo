@@ -6,7 +6,6 @@ def build(bld):
         'mod-routing-helper.cc',
         'mod-routing-table.cc',
         'mod-routing.cc',
-        'MyTag.cc',
         ]
     headers = bld(features='ns3header')
     headers.module = 'mod'
@@ -14,7 +13,6 @@ def build(bld):
         'mod-routing-helper.h',
         'mod-routing-table.h',
         'mod-routing.h',
-        'MyTag.h',
         ]
 
 
